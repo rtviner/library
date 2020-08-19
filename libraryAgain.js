@@ -13,7 +13,6 @@ function Book(title, author, pages, isRead) {
 };
 
 function addBookToLibrary(input) {
-  console.log("input:", input);
   let title = input[0].value;
   let author = input[1].value;
   let pages = input[2].value;
@@ -28,14 +27,21 @@ function addBookToLibrary(input) {
 };
 
 function removeBookFromLibrary(index) {
-  console.log(myLibrary);
-  myLibrary.splice(index, 1);
-  console.log(myLibrary);
+  if (myLibrary.length === 1) myLibrary = [];
+  else myLibrary.splice(index, 1);
   render()
+};
+
+function clearLibraryDisplay() {
+  let library = document.getElementsByClassName('myLibrary')[0];
+  while (library.firstChild) {
+    library.removeChild(library.firstChild);
+  };
 };
 
 function render() {
   // needs to clear previous render first...
+  clearLibraryDisplay();
   let library = document.getElementsByClassName('myLibrary')[0];
     if (myLibrary.length > 0) {
       
@@ -90,6 +96,7 @@ function showBookForm() {
   form.classList.remove('hidden');
   // listen to submit event from form
   form.addEventListener('submit', (event) => {
+    event.stopImmediatePropagation();
     event.preventDefault();
     addBookToLibrary(form.elements);
     // clear form values first
@@ -102,4 +109,5 @@ render();
 
 // grab the add book button and add an event listener
 let bookFormButton = document.querySelector('button');
+
 bookFormButton.addEventListener('click', showBookForm);
